@@ -31,14 +31,13 @@
 import Vue from 'vue'
 import moment from 'vue-moment'
 
-// import Details from './Details'
 
 
 Vue.use(moment);
 
 export default {
     components:{
-        // Details
+        
     },
     data() {
         return {
@@ -62,9 +61,10 @@ export default {
             return parseFloat(val).toFixed(2)
         },
         async startFetch() {
-        const url='https://master.cofreex.eu/api/auth/login'
+        
+        const url=process.env.VUE_APP_API_KEY
         let h=new Headers()
-        let encoded= window.btoa('virtara:123456ab')
+        let encoded= window.btoa(`${process.env.VUE_APP_LOGIN}`)
         let auth = 'Basic ' + encoded
         h.append('Authorization',auth)
         sessionStorage.setItem('newToken',JSON.stringify(encoded))
@@ -73,14 +73,13 @@ export default {
             headers: h,
         })
         var token=await fetch(req).then((res)=>res.json()).then((res)=>  res.data.token)
-        const newURL= 'https://master.cofreex.eu/api/ecommerce/order/order'
+        const newURL= process.env.VUE_APP_NEW_URL
         let newReq= new Request(newURL, {
             headers: {
                 Authorization:'Bearer '+ token
             }
         })
         await fetch(newReq).then((res)=> res.json()).then((res)=> this.siparisler=res.data)
-        console.log('FETCHED');
         }
     }
 
